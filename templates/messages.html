@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Messages
+{% endblock %}
+
+{% block main %}
+    <div class="modal" id="message">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Message</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% if following %}
+                <form action="/messages" method="post">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="users">Select:</label>
+                            <select name="username" multiple="" size="" class="form-control" id="users" style="height: auto !important;">
+                                {% for user in following %}
+                                    <option value="{{ user['username'] }}">{{ user['username'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-blue">Message</button>
+                        <button class="btn btn-primary" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+                {% else %}
+                    <div class="modal-body">
+                        <p>Must follow users to compose a new message</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" data-dismiss="modal">Close</button>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-blue btn-lg btn-block rounded-sm" data-toggle="modal" data-target="#message" style="font-size: xx-large; letter-spacing: 3px;">
+        <span style="float: left; vertical-align: center;">New Message</span>
+        <span style="float: right;" >&#65291;</span>
+    </button>
+    </br>
+    {% for user in users %}
+        <form action="/messages" method="post">
+            <button class="btn btn-primary btn-lg btn-block rounded-sm" name="username" value="{{ user }}"style="font-size: xx-large; letter-spacing: 3px;">
+                <span style="float: left; vertical-align: center;">{{ user }}</span>
+                <span style="float: right;" >&#8594;</span>
+            </button>
+        </form>
+        </br>
+    {% endfor %}
+{% endblock %}

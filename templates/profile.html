@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Profile
+{% endblock %}
+
+{% block main %}
+    <div class="jumbotron bg-primary">
+        <h1 class="display-3 text-white">{{ user['username'] }}</h1>
+        <p class="lead text-white">{{ user['bio'] }}</p>
+        <hr class="my-2">
+        <p class="lead text-white">{{ user['genres'] }}</p>
+        {% if user['id'] == session.user_id %}
+            <form action="/information">
+                <button class="btn btn-blue mt-3 mb-2 rounded-sm" type="submit">Edit Profile</button>
+            </form>
+        {% elif following %}
+            <form action="/follow" method="post">
+                <button class="btn btn-blue mt-3 mb-2 rounded-sm" name="follow" type="submit" value="unfollow {{ user['username'] }}">Unfollow</button>
+            </form>
+        {% else %}
+            <form action="/follow" method="post">
+                <button class="btn btn-blue mt-3 mb-2 rounded-sm" name="follow" type="submit" value="follow {{ user['username'] }}">Follow</button>
+            </form>
+        {% endif %}
+    </div>
+    {% if user["id"] == session.user_id %}
+        <div class="modal" id="post">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">New Post</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form enctype="multipart/form-data" method="post" action="/post">
+                            <div class="form-group">
+                                <label for="caption">Caption:</label>
+                                <textarea class="form-control" id="caption" name="caption"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="file">File (.wav or .mp3):</label>
+                                <div class="custom-file" id="file">
+                                    <label class="custom-file-label" for="audio">Choose file</label>
+                                    <input type="file" name="audio" class="custom-file-input" id="audio" aria-describedby="fileHelp">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-blue rounded-sm">Post</button>
+                                <button class="btn btn-primary rounded-sm" data-dismiss="modal">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-blue btn-lg btn-block rounded-sm" data-toggle="modal" data-target="#post" style="font-size: xx-large; letter-spacing: 3px;">
+            <span style="float: left; vertical-align: center;">New Post</span>
+            <span style="float: right;" >&#65291;</span>
+        </button>
+        </br>
+    {% endif %}
+    {% if (following and posts) or user["id"] == session.user_id %}
+        {% for post in posts %}
+            <div class="card bg-primary my-3 w-auto" style="max-width: auto">
+                <div class="card-body">
+                    <audio controls>
+                        <source src="{{ url_for('upload', filename=post.name) }}" type="{{ post['type'] }}">
+                    </audio>
+                    {% if post["caption"] %}
+                        <p class="card-subtitle text-white">{{ post['caption'] }}</p>
+                    {% endif %}
+                    <p class="card-subtitle text-white" style="font-size: small">{{ post['time'] }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    {% elif not following %}
+        <h3>Must follow user to view posts</h3>
+    {% elif user['id'] != session.user_id %}
+        <h3>This user has not posted yet</h3>
+    {% endif %}
+{% endblock %}

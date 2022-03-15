@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Information
+{% endblock %}
+
+{% block main %}
+    <form action="/information" method="post">
+        <legend class="text-primary">Bio</legend>
+        <div class="form-group">
+            <textarea class="form-control" name="bio">{{ bio }}</textarea>
+        </div>
+        <legend class="text-primary">What genres of music are you interested in?</legend>
+        <div class="form-group">
+            {% for genre in genres %}
+                {% if genre in user_genres %}
+                <div class="custom-control custom-checkbox">
+                    <input name="genre" class="custom-control-input" type="checkbox" id="{{ genre }}" value="{{ genre }}" checked>
+                    <label class="custom-control-label" for="{{ genre }}">{{ genre }}</label>
+                    </br>
+                </div>
+                {% else %}
+                <div class="custom-control custom-checkbox">
+                    <input name="genre" class="custom-control-input" type="checkbox" id="{{ genre }}" value="{{ genre }}">
+                    <label class="custom-control-label" for="{{ genre }}">{{ genre }}</label>
+                    </br>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <button class="btn btn-blue" type="submit">Submit</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Message:
+{% endblock %}
+
+{% block main %}
+    <div class="card bg-primary my-3 w-auto" style="max-width: auto; overflow: auto;">
+        <h1 class="text-white mx-5 mt-5 mb-3">Messages: {{ username }}</h1>
+        {% for message in messages %}
+            {% if message["sender"] == session.user_id %}
+                <div class="card bg-blue ml-6 mx-5 my-2-3" style="max-width: 40rem">
+                    <div class="card-body">
+                        <p class="card-subtitle text-white" style="font-size: x-large">{{ message['message'] }}</p>
+                        <p class="card-subtitle text-white" style="font-size: small">{{ message['time'] }}</p>
+                    </div>
+                </div>
+            {% else %}
+                <div class="card bg-secondary mx-5 my-2-3" style="max-width: 40rem">
+                    <div class="card-body">
+                        <p class="card-subtitle text-primary" style="font-size: x-large">{{ message['message'] }}</p>
+                        <p class="card-subtitle text-primary" style="font-size: small">{{ message['time'] }}</p>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+        <form action="/message" method="post" class="form-inline mx-5 mt-3 mb-5">
+            <div class="form-group">
+                <input autocomplete="off" autofocus class="form-control rounded-sm" name="message" type="text" placeholder="Message..." style="width: 54rem;">
+                <input type="hidden" name="username" value="{{ username }}">  
+                <button class="btn btn-blue rounded-sm" type="submit">Send</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

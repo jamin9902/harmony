@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Guide
+{% endblock %}
+
+{% block main %}
+    <form action="{{ redirect }}">
+        <h3>{{ message }}</h3>
+        </br>
+        <button class="btn btn-primary btn-large" type="submit">Back</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+    {% if posts %}
+        {% for post in posts %}
+            <div class="card bg-primary my-3 w-auto" style="max-width: auto">
+                <div class="card-body">
+                    <h2 class="card-title text-white">{{ post['username'] }}</h2>
+                    <audio controls>
+                        <source src="{{ url_for('upload', filename=post.name) }}" type="{{ post['type'] }}">
+                    </audio>
+                    {% if post["caption"] %}
+                        <p class="card-subtitle text-white">{{ post['caption'] }}</p>
+                    {% endif %}
+                    <p class="card-subtitle text-white" style="font-size: small">{{ post['time'] }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+    <h3>None of the users you are following have posted yet</h3>
+    {% endif %}
+{% endblock %}

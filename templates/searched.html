@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Search Results
+{% endblock %}
+
+{% block main %}
+    {% for user in users %}
+        <div class="card bg-primary my-3 w-auto" style="max-width: auto">
+            <div class="card-body">
+                <h2 class="card-title text-white">{{ user['username'] }}</h2>
+                {% if user['bio'] %}
+                    <p class="card-subtitle text-white" >{{ user['bio'] }}</p>
+                {% endif %}
+                {% if user['genres'] %}
+                    <p class="card-subtitle text-white">{{ user['genres'] }}</p>
+                {% endif %}
+                <form action="/profile">
+                    <button class="btn btn-blue mt-3 mb-1 rounded-sm" name="user" type="submit" value="{{ user['username'] }}">View Profile</button>
+                </form>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
